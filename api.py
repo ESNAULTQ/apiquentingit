@@ -13,7 +13,7 @@ from model import IrisModel, IrisSpecies
 
 #Créer une instance de FastAPI
 app = FastAPI()
-model = IrisModel()
+model = joblib.load("iris_regressor.pkl")
 
 # Définir un modèle de requête
 class IrisRequest(BaseModel):
@@ -25,7 +25,7 @@ class IrisRequest(BaseModel):
 #@app.on_event("startup")
 #def load_model():
 #    global model
-#   model = joblib.load("iris_regressor.pkl")
+
 
 # Point de terminaison pour faire une prédiction
 @app.post("/predictpost")
@@ -56,14 +56,14 @@ def predictget(sepal_width: float, petal_length: float, petal_width: float):
     return {"predicted_sepal_length": prediction[0]}
 
 
-@app.get('/predictspecies')
-def predict_species(iris: IrisSpecies):
-    print('im here')
-    data = iris.dict()
-    prediction, probability = model.predict_species(
-        data['sepal_length'], data['sepal_width'], data['petal_length'], data['petal_width']
-    )
-    return {
-        'prediction': prediction,
-        'probability': probability
-    }
+# @app.get('/predictpost')
+# def predict_species(iris: IrisRequest):
+#     print('im here')
+#     data = iris.dict()
+#     prediction, probability = model.predict_species(
+#         data['sepal_length'], data['sepal_width'], data['petal_length'], data['petal_width']
+#     )
+#     return {
+#         'prediction': prediction,
+#         'probability': probability
+#     }
