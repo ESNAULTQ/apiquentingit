@@ -47,3 +47,7 @@ class IrisModel:
         prediction = self.model.predict(data_in)
         probability = self.model.predict_proba(data_in).max()
         return prediction[0], probability
+
+def test_model_initialization(self):
+    new_model = IrisModel()
+    self.assertIn('iris_model.pkl', new_model.model_fname_)
