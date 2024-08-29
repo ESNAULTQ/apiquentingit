@@ -80,7 +80,7 @@ import joblib
 
 #Créer une instance de FastAPI
 app = FastAPI()
-model = joblib.load("iris_regressor.pkl")
+model = joblib.load("iris_model.pkl")
 
 # Définir un modèle de requête
 class IrisRequest(BaseModel):
