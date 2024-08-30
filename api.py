@@ -108,31 +108,24 @@
 
 # api.py
 from fastapi import FastAPI
-from pydantic import BaseModel
-import joblib
 import numpy as np
+from model import IrisModel  # Importer la classe IrisModel
 
-# Charger le modèle
-model = joblib.load("iris_model.pkl")
+# Charger le modèle en utilisant la classe IrisModel
+iris_model = IrisModel()
+iris_model.load_model()
 
 # Initialiser FastAPI
 app = FastAPI()
 
-# Définir le schéma des requêtes
-class IrisRequest(BaseModel):
-    sepal_length: float
-    sepal_width: float
-    petal_length: float
-    petal_width: float
+# Route pour faire une prédiction avec une requête GET
+@app.get("/predict")
+def predict(sepal_length: float, sepal_width: float, petal_length: float, petal_width: float):
+    # Convertir les paramètres en un tableau NumPy
+    data = np.array([[sepal_length, sepal_width, petal_length, petal_width]])
 
-# Route pour faire une prédiction
-@app.post("/predict")
-def predict(iris: IrisRequest):
-    # Convertir la requête en un tableau NumPy
-    data = np.array([[iris.sepal_length, iris.sepal_width, iris.petal_length, iris.petal_width]])
-
-    # Faire une prédiction
-    prediction = model.predict(data)
+    # Faire une prédiction en utilisant la classe IrisModel
+    prediction = iris_model.predict(data)
 
     # Retourner la classe prédite
     return {"predicted_class": int(prediction[0])}

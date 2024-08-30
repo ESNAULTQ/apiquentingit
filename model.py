@@ -52,32 +52,50 @@
 # #     new_model = IrisModel()
 # #     self.assertIn('iris_model.pkl', new_model.model_fname_)
 
-# train_model.py
+# model.py
 from sklearn.datasets import load_iris
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 import joblib
 
-# Charger le dataset Iris
-iris = load_iris()
-X = iris.data
-y = iris.target
+class IrisModel:
+    def __init__(self):
+        self.model_fname = 'iris_model.pkl'
+        self.model = None
 
-# Diviser les données en ensembles d'entraînement et de test
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    def train(self):
+        # Charger le dataset Iris
+        iris = load_iris()
+        X = iris.data
+        y = iris.target
 
-# Initialiser le modèle
-model = RandomForestClassifier(n_estimators=100, random_state=42)
+        # Diviser les données en ensembles d'entraînement et de test
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Entraîner le modèle
-model.fit(X_train, y_train)
+        # Initialiser et entraîner le modèle
+        self.model = RandomForestClassifier(n_estimators=100, random_state=42)
+        self.model.fit(X_train, y_train)
 
-# Faire des prédictions et vérifier l'exactitude
-y_pred = model.predict(X_test)
-accuracy = accuracy_score(y_test, y_pred)
-print(f"Accuracy: {accuracy * 100:.2f}%")
+        # Faire des prédictions et vérifier l'exactitude
+        y_pred = self.model.predict(X_test)
+        accuracy = accuracy_score(y_test, y_pred)
+        print(f"Accuracy: {accuracy * 100:.2f}%")
 
-# Sauvegarder le modèle entraîné
-joblib.dump(model, "iris_model.pkl")
-print("Modèle enregistré en tant que 'iris_model.pkl'")
+        # Sauvegarder le modèle
+        self.save_model()
+
+    def save_model(self):
+        joblib.dump(self.model, self.model_fname)
+        print(f"Modèle enregistré en tant que '{self.model_fname}'")
+
+    def load_model(self):
+        self.model = joblib.load(self.model_fname)
+        print(f"Modèle chargé depuis '{self.model_fname}'")
+
+    def predict(self, data):
+        return self.model.predict(data)
+
+if __name__ == "__main__":
+    iris_model = IrisModel()
+    iris_model.train()
