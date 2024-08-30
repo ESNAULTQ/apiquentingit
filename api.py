@@ -119,7 +119,7 @@ iris_model.load_model()
 app = FastAPI()
 
 # Route pour faire une prédiction avec une requête GET
-@app.get("/predict")
+@app.post("/predict")
 def predict(sepal_length: float, sepal_width: float, petal_length: float, petal_width: float):
     # Convertir les paramètres en un tableau NumPy
     data = np.array([[sepal_length, sepal_width, petal_length, petal_width]])
