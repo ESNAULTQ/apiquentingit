@@ -33,9 +33,11 @@ class TestIrisModel(unittest.TestCase):
         # Exemple de données pour prédiction
         sample_data = [[5.1, 3.5, 1.4, 0.2]]  # Valeurs arbitraires correspondant aux dimensions des fleurs
 
-        # Faire une prédiction et vérifier que le résultat est un entier (classe prédite)
+        # Faire une prédiction
         prediction = self.model.predict(sample_data)
-        self.assertIsInstance(prediction[0], int)
+
+        # Convertir la prédiction en int natif pour la vérification
+        self.assertIsInstance(int(prediction[0]), int)
 
 if __name__ == '__main__':
     unittest.main()
